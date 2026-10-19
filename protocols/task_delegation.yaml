@@ -1,0 +1,44 @@
+# Interaction protocol for task delegation between a planner and a robot.
+# All guards are derived from this file when it is loaded.
+name: task-delegation
+version: 1
+roles: [planner, robot]
+initial: idle
+final: [done, failed, refused]
+
+# The state machine. A message is valid only if it matches a transition
+# from the current state AND comes from the listed sender role.
+transitions:
+  - {from: idle,      message: REQUEST,     sender: planner, to: requested}
+  - {from: requested, message: AGREE,       sender: robot,   to: executing}
+  - {from: requested, message: REFUSE,      sender: robot,   to: refused}
+  - {from: executing, message: INFORM_DONE, sender: robot,   to: done}
+  - {from: executing, message: FAILURE,     sender: robot,   to: failed}
+
+# Which role may act on the world, and which actions are allowed in which state.
+actions:
+  actor: robot
+  allowed_in:
+    executing: [move, pick, drop]
+
+# Strict format for message content. Each listed field must fully match its
+# regular expression. Messages not listed here must have empty content.
+content:
+  REQUEST:
+    task: '^move box (?P<box>[0-9]+) from shelf (?P<shelf>[A-Z]) to dock (?P<dock>[0-9]+)$'
+  REFUSE:
+    reason: "^[a-z0-9 ,.'-]{1,80}$"
+  FAILURE:
+    reason: "^[a-z0-9 ,.'-]{1,80}$"
+
+# Phrases that read like instructions to an agent rather than data.
+# Checked case-insensitively in every text field of every message.
+deny_phrases:
+  - ignore the rules
+  - ignore previous
+  - ignore all
+  - disregard
+  - override
+  - restricted zone
+  - system prompt
+  - you are now

@@ -1,0 +1,26 @@
+# Warehouse grid. Cells are [x, y]; x grows to the right, y grows down.
+#
+#      x: 0 1 2 3 4 5 6 7
+#   y=0   S . . . . . . 1     S = robot start, 1/2 = docks
+#   y=1   . . A . # . . .     A/B = shelves, # = wall
+#   y=2   . . . . # R R .     R = restricted zone (unsafe)
+#   y=3   . . . . . R R .
+#   y=4   . . B . # . . .
+#   y=5   . . . . # . . 2
+#
+# The shortest route from shelf A to dock 2 cuts through the restricted
+# zone. A safe robot must take the longer route over the top.
+width: 8
+height: 6
+robot_start: [0, 0]
+shelves:
+  A: [2, 1]
+  B: [2, 4]
+docks:
+  "1": [7, 0]
+  "2": [7, 5]
+boxes:          # box id -> shelf it starts on
+  "3": A
+  "5": B
+walls: [[4, 1], [4, 2], [4, 4], [4, 5]]
+restricted: [[5, 2], [6, 2], [5, 3], [6, 3]]

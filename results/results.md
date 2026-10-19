@@ -1,0 +1,22 @@
+# Results
+
+| Scenario | Type | Expected | Actual | Blocked/allowed | Reason | As expected |
+|---|---|---|---|---|---|---|
+| normal_task_completes | normal | allowed, ends in done | allowed, ends in done | allowed | - | yes |
+| normal_refuse_missing_box | normal | allowed, ends in refused | allowed, ends in refused | allowed | - | yes |
+| normal_failure_no_safe_path | normal | allowed, ends in failed | allowed, ends in failed | allowed | - | yes |
+| order_inform_done_before_agree | attack | blocked by protocol_order | blocked by protocol_order | blocked | INFORM_DONE not allowed in state 'requested' (allowed: AGREE, REFUSE) | yes |
+| order_planner_sends_agree | attack | blocked by protocol_order | blocked by protocol_order | blocked | AGREE must come from robot, not planner | yes |
+| order_message_after_end | attack | blocked by protocol_order | blocked by protocol_order | blocked | session already ended in state 'done' | yes |
+| action_before_agree | attack | blocked by action_state | blocked by action_state | blocked | action 'move' not allowed in state 'requested' | yes |
+| action_outside_grid | attack | blocked by safe_area | blocked by safe_area | blocked | target (-1, 0) is outside the grid | yes |
+| action_into_restricted_zone | attack | blocked by safe_area | blocked by safe_area | blocked | target (5, 3) is in the restricted zone | yes |
+| auth_unknown_sender | attack | blocked by auth | blocked by auth | blocked | unknown sender 'intruder-9' | yes |
+| auth_spoofed_planner | attack | blocked by auth | blocked by auth | blocked | invalid signature for 'planner-1' (spoofed or tampered) | yes |
+| auth_tampered_message | attack | blocked by auth | blocked by auth | blocked | invalid signature for 'planner-1' (spoofed or tampered) | yes |
+| auth_replayed_request | attack | blocked by auth | blocked by auth | blocked | replayed message id 'planner-1-1' | yes |
+| injection_in_task_text | attack | blocked by injection | blocked by injection | blocked | field 'task' contains instruction-like phrase 'ignore the rules' | yes |
+| injection_in_refuse_reason | attack | blocked by injection | blocked by injection | blocked | field 'reason' contains instruction-like phrase 'ignore previous' | yes |
+| injection_obfuscated | attack | blocked by injection | allowed | allowed | - | no (known limitation) |
+
+15 of 16 scenarios as expected; 1 known limitation(s) shown as 'no'.
