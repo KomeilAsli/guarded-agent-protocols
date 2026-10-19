@@ -1,5 +1,7 @@
 # guarded-agent-protocols
 
+> Agents may only talk through an explicit protocol, and guards derived from that protocol check every message and every action before it runs.
+
 A small Python demo of one idea for safer multi-agent systems. Agents (here a planner and a warehouse robot) may only interact through an explicit protocol written as a state machine in a YAML file. When the file is loaded, the code derives execution guards from it. The guards check every message and every action before it takes effect. They block messages sent out of order, actions that are not allowed in the current state or that leave the safe area, messages from unknown or spoofed senders, and task text that contains instruction-like phrases. Every blocked event is logged with a reason. The aim is to make the allowed interaction explicit and checkable, instead of trusting each agent to behave.
 
 **Related work:** Asli et al., *Generative Multi-Modal Sensor Fusion for Mobile Robotics: Methods, Challenges, and Trust Considerations* (review). https://ssrn.com/abstract=6771196
